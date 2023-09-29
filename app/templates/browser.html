@@ -1,7 +1,10 @@
-<!-- templates/browser.html -->
 {% extends "base.html" %}
 
 {% block content %}
-<h1>Browser Page</h1>
-<p>Explore content on the browser page!</p>
+<h2>Wyszukiwarka</h2>
+<form action="/recommend" method="post">
+  <label for="interest">Czym się interesujesz?</label>
+  <input type="text" id="interest" name="interest" required>
+  <button type="submit">Wyślij</button>
+</form>
 {% endblock %}
