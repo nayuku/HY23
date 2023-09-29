@@ -1,1 +1,3 @@
 * predykcja dostania się na podstawie wyników matury (ci którzy zdali)
+* check/research jak wdrożyć langchain i po co
+* odpowiedzi od chata mają być na tej samej stronie co pytano i kontynuacja rozmowy?
