@@ -15,8 +15,7 @@ with open(f"{dir_path}/apikey.txt") as f:
   openai.api_key = f.read().strip()
 
 @app.get("/", response_class=HTMLResponse)
-async def read_home():
-  print(openai.api_key)
+async def read_calc():
   return templates.TemplateResponse("home.html", {"request": {}})
 
 
