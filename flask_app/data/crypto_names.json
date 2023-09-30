@@ -1,17 +1,1 @@
-[
-  {
-    "id": 1,
-    "name": "Bitcoin",
-    "short_name": "BTC"
-  },
-  {
-    "id": 2,
-    "name": "Ethereum",
-    "short_name": "ETH"
-  },
-  {
-    "id": 3,
-    "name": "Manchester City Fan Token",
-    "short_name": "CITY"
-  }
-]
+[{"name": "Bitcoin", "short_name": "BTC", "id": 1}, {"name": "Ethereum", "short_name": "ETH", "id": 2}, {"name": "Manchester City Fan Token", "short_name": "CITY", "id": 3}]
