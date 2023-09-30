@@ -14,19 +14,19 @@
             <div class="form-group row">
                 <label class="col-sm-5 col-form-label">Nazwa organu egzekucyjnego</label>
                 <div class="col-sm-7">
-                    <input id="Enforcement_authority" name="Enforcement_authority" for="Enforcement_authority" required="" type="text" class="form-control">
+                    <input id="Enforcement_authority" name="Enforcement_authority" required="" type="text" class="form-control">
                 </div>
             </div>
             <div class="form-group row">
                 <label class="col-sm-5 col-form-label">Numer sprawy</label>
                 <div class="col-sm-7">
-                    <input id="Case_number" name="Case_number" for="Case_number" required="" type="text" class="form-control">
+                    <input id="Case_number" name="Case_number" required="" type="text" class="form-control">
                 </div>
             </div>
             <div class="form-group row">
                 <label class="col-sm-5 col-form-label">Dane właściciela</label>
                 <div class="col-sm-7">
-                    <input id="Owner" name="Owner" for="Owner" required="" type="text" class="form-control">
+                    <input id="Owner" name="Owner" required="" type="text" class="form-control">
                 </div>
             </div>
             <div class="input-group">
@@ -40,7 +40,7 @@
                 </div>
             </div>
             <hr>
-            <div id="form-container"></div>
+            <div id="crypto-field-form-container"></div>
             <input type=submit class="btn btn-primary" value="Dalej">
         </form>
     </div>
@@ -94,8 +94,8 @@
         remove_crypto_field_button.addEventListener("click", function(){remove_crypto_field(crypto_field_div);}, false);
 
         <!-- Dodanie pozycji do formularza -->
-        var form_container = document.getElementById("form-container");
-        form_container.appendChild(crypto_field_div);
+        var crypto_field_form_container = document.getElementById("crypto-field-form-container");
+        crypto_field_form_container.appendChild(crypto_field_div);
 
         <!-- Uaktualnienie crypto_field_select -->
         crypto_field_select.remove(crypto_field_select.selectedIndex);

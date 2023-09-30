@@ -11,18 +11,21 @@
         {% endwith %}
 
         <form method=post>
-            <div class="input-group">
-                <select class="custom-select" id="market-select">
-                    {% for market in markets %}
-                         <option value={{market["id"]}}>{{market["name"]}}</option>
-                    {% endfor %}
-                </select>
-                <div class="input-group-append">
-                    <button class="btn btn-outline-secondary" id="add-market-btn" type="button" onclick="add_crypto_field()">Dodaj dostawcę danych</button>
+            <fieldset>
+                <legend style="text-align: left;">Dostawcy kursów kryptoaktywów czasu rzecywistego</legend>
+                <div class="input-group">
+                    <select class="custom-select" id="market-select">
+                        {% for market in markets %}
+                             <option value={{market["id"]}}>{{market["name"]}}</option>
+                        {% endfor %}
+                    </select>
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary" id="add-market-btn" type="button" onclick="add_crypto_field()">Dodaj dostawcę</button>
+                    </div>
                 </div>
-            </div>
+            </fieldset>
             <hr>
-            <div id="form-container"></div>
+            <div id="market-form-container"></div>
             <input type=submit class="btn btn-primary" value="Dalej">
         </form>
     </div>
