@@ -11,8 +11,8 @@
 
     <div class="content-section" style="text-align: center; width: 1000px; margin: 0 auto;">
         <h2><a class="article-title">Edycja słownika</a></h2>
-      <form id="dataForm"></form>
-      <table border="1">
+      <form id="dataForm">
+      <table border="1" id="dataTable">
         <thead>
           <tr>
             <th>Nazwa</th>
@@ -22,22 +22,54 @@
         <tbody>
           {% for row in crypto_fields %}
           <tr>
-            <td><input type="text" name="name" value="{{ row.name }}"></td>
-            <td><input type="text" name="short_name" value="{{ row.short_name }}"></td>
+            <td><input type="text" required="" name="name" value="{{ row.name }}"></td>
+            <td><input type="text" required="" name="short_name" value="{{ row.short_name }}"></td>
+            <td><button class="btn btn-danger deleteBtn">x</button></td>
           </tr>
           {% endfor %}
         </tbody>
       </table>
+      <button id="add" class="btn btn-success">Dodaj</button>
       <input type="submit" value="Zapisz zmiany" class="btn btn-primary" onclick="save_json()">
+      <p id="error" style="color: red;"></p>
       </form>
+
     </div>
     <script>
+      document.addEventListener('DOMContentLoaded', () => {
+          // Attach event listener to the table
+          const table = document.getElementById('dataTable');
+          table.addEventListener('click', function (e) {
+            // Check if the clicked element is a delete button
+            if (e.target && e.target.classList.contains('deleteBtn')) {
+              // Remove the parent tr element of the clicked button
+              e.target.closest('tr').remove();
+            }
+          });
+
+          // Attach event listener to the add button
+          document.getElementById('add').addEventListener('click', function () {
+            var tableBody = table.getElementsByTagName('tbody')[0];
+            var newRow = tableBody.insertRow();
+            var cell1 = newRow.insertCell(0);
+            var cell2 = newRow.insertCell(1);
+            var cell3 = newRow.insertCell(2);
+            cell1.innerHTML = '<input type="text" name="name" value="" required="">';
+            cell2.innerHTML = '<input type="text" name="short_name" value="" required="">';
+            cell3.innerHTML = '<button class="btn btn-danger deleteBtn">x</button>'; // Removed unnecessary <td> tag
+          });
+        });
      function save_json() {
           let tableData = [];
           document.querySelectorAll('tbody tr').forEach(row => {
             let rowData = {};
             rowData.name = row.querySelector('[name=name]').value;
             rowData.short_name = row.querySelector('[name=short_name]').value;
+            if (!rowData.name || !rowData.short_name) {
+              var errorElement = document.getElementById('error');
+              errorElement.textContent = 'Uzupełnij wszystkie pola!';
+              return
+            }
             tableData.push(rowData);
           });
 
