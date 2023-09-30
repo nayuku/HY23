@@ -10,23 +10,125 @@
             {% endif %}
         {% endwith %}
 
+        <div class="form-group row">
+            <legend style="text-align: left;" class="col-sm-7">Manualne definiowanie kursów kryptoaktywów</legend>
+        </div>
+        <div id="manual-data-form-container">
+            <div class="form-group row">
+                <label class="col-sm-5 col-form-label">Adres URL</label>
+                <div class="col-sm-7">
+                    <input id="address_url" class="form-control" name="address_url" type="text" required="">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-5 col-form-label">Nazwa giełdy/kantoru</label>
+                <div class="col-sm-7">
+                    <input id="market_name" class="form-control" name="market_name" type="text" required="">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-5 col-form-label">Wysokość kursu</label>
+                <div class="col-sm-5">
+                    <input id="rate_value" name="rate_value" type="number" step="0.00000001" min="0" class="form-control" required="">
+                </div>
+                <div class="col-sm-2">
+                    <select id="currency" class="custom-select" name="currency" required="" >
+                        <option value="PLN">PLN</option>
+                        <option value="USD">USD</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        
         <form method=post>
             <fieldset>
                 <legend style="text-align: left;">Dostawcy kursów kryptoaktywów czasu rzecywistego</legend>
                 <div class="input-group">
                     <select class="custom-select" id="market-select">
                         {% for market in markets %}
-                             <option value={{market["id"]}}>{{market["name"]}}</option>
+                             <option value={{market["id"]}}>{{market["name"]}} ({{market["address_url"]}})</option>
                         {% endfor %}
                     </select>
                     <div class="input-group-append">
-                        <button class="btn btn-outline-secondary" id="add-market-btn" type="button" onclick="add_crypto_field()">Dodaj dostawcę</button>
+                        <button class="btn btn-outline-secondary" id="add-market-btn" type="button" onclick="add_data_provider()">Dodaj dostawcę</button>
                     </div>
                 </div>
             </fieldset>
-            <hr>
             <div id="market-form-container"></div>
+            <hr>
             <input type=submit class="btn btn-primary" value="Dalej">
         </form>
     </div>
+
+    <script>
+    function add_data_provider() {
+        <!-- Ustawienie zmiennych -->
+        var market_select = document.getElementById("market-select");
+        var market_name = market_select.options[market_select.selectedIndex].text;
+        var market_label_name = market_select.options[market_select.selectedIndex].text;
+        var market_name = String(market_label_name.split("(", 1)).trim()
+
+        <!-- Przycisk do usunięcia pozycji -->
+        var remove_market_button_span = document.createElement("SPAN");
+        remove_market_button_span.setAttribute("aria-hidden", "true");
+        remove_market_button_span.innerHTML = "&times;";
+
+        var remove_market_button = document.createElement("BUTTON");
+        remove_market_button.setAttribute("type", "button");
+        remove_market_button.setAttribute("class", "col-sm-1 close");
+        remove_market_button.setAttribute("aria-label", "Remove");
+        remove_market_button.appendChild(remove_market_button_span);
+
+        <!-- Etykieta giełdy/kantoru  -->
+        var market_label = document.createElement("LABEL");
+        market_label.setAttribute("class", "col-sm-11 col-form-label");
+        market_label.style.textAlign = "left";
+        market_label.innerHTML = market_label_name;
+
+        <!-- Deklaracja dodawanej dynamicznie pozycji -->
+        var market_div = document.createElement("DIV");
+        market_div.setAttribute("class", "form-group row");
+        market_div.appendChild(remove_market_button);
+        market_div.appendChild(market_label);
+        remove_market_button.addEventListener("click", function(){remove_market(market_div);}, false);
+
+        <!-- Dodanie pozycji do formularza -->
+        var market_form_container = document.getElementById("market-form-container");
+        market_form_container.appendChild(market_div);
+
+        <!-- Uaktualnienie market_select -->
+        market_select.remove(market_select.selectedIndex);
+        if (market_select.options.length == 0) {
+            add_market_button = document.getElementById("add-market-btn");
+            add_market_button.disabled = true;
+            market_select.disabled = true;
+        }
+    }
+    </script>
+
+    <script>
+    function remove_market(market_div) {
+        <!-- Ustawienie zmiennych -->
+        var market_labels = market_div.getElementsByTagName("LABEL");
+        var market_select = document.getElementById("market-select");
+        for (var i = 0; i < market_labels.length; i++) {
+            market_label = market_labels[i];
+            market_name = (market_label.innerText || market_label.textContent);
+            <!-- Przywrócenie dostawcy danych do market_select -->
+            var market_option = document.createElement("option");
+            market_option.text = market_name;
+            market_select.add(market_option);
+        }
+
+        <!-- Uaktualnienie market_select -->
+        if (market_select.disabled && market_select.options.length > 0) {
+            add_market_button = document.getElementById("add-market-btn");
+            add_market_button.disabled = false;
+            market_select.disabled = false;
+        }
+
+        <!-- Usunięcie dostawcy danych z formularza -->
+        market_div.remove();
+    }
+    </script>
 {% endblock %}

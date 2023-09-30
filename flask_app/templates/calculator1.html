@@ -48,7 +48,6 @@
     <script>
     function add_crypto_field() {
         <!-- Ustawienie zmiennych -->
-        var crypto_fields = {{ crypto_fields|tojson|safe }};
         var crypto_field_select = document.getElementById("crypto-field-select");
         var crypto_field_name = crypto_field_select.options[crypto_field_select.selectedIndex].text;
         var crypto_name = String(crypto_field_name.split("(", 1)).trim()
@@ -73,7 +72,6 @@
         var crypto_field_input = document.createElement("INPUT");
         crypto_field_input.setAttribute("id", crypto_name);
         crypto_field_input.setAttribute("name", crypto_name);
-        crypto_field_input.setAttribute("for", crypto_name);
         crypto_field_input.required = true;
         crypto_field_input.setAttribute("type", "number");
         crypto_field_input.setAttribute("step", "0.00000001");
@@ -97,13 +95,13 @@
         var crypto_field_form_container = document.getElementById("crypto-field-form-container");
         crypto_field_form_container.appendChild(crypto_field_div);
 
-        <!-- Uaktualnienie crypto_field_select -->
-        crypto_field_select.remove(crypto_field_select.selectedIndex);
-        if (crypto_field_select.options.length == 0) {
-            add_crypto_field_button = document.getElementById("add-crypto-field-btn");
-            add_crypto_field_button.disabled = true;
-            crypto_field_select.disabled = true;
-        }
+<!--        &lt;!&ndash; Uaktualnienie crypto_field_select &ndash;&gt;-->
+<!--        crypto_field_select.remove(crypto_field_select.selectedIndex);-->
+<!--        if (crypto_field_select.options.length == 0) {-->
+<!--            add_crypto_field_button = document.getElementById("add-crypto-field-btn");-->
+<!--            add_crypto_field_button.disabled = true;-->
+<!--            crypto_field_select.disabled = true;-->
+<!--        }-->
     }
     </script>
 
@@ -121,14 +119,14 @@
             crypto_field_select.add(crypto_field_option);
         }
 
-        <!-- Uaktualnienie crypto_field_select -->
-        if (crypto_field_select.disabled && crypto_field_select.options.length > 0) {
-            add_crypto_field_button = document.getElementById("add-crypto-field-btn");
-            add_crypto_field_button.disabled = false;
-            crypto_field_select.disabled = false;
-        }
+<!--        &lt;!&ndash; Uaktualnienie crypto_field_select &ndash;&gt;-->
+<!--        if (crypto_field_select.disabled && crypto_field_select.options.length > 0) {-->
+<!--            add_crypto_field_button = document.getElementById("add-crypto-field-btn");-->
+<!--            add_crypto_field_button.disabled = false;-->
+<!--            crypto_field_select.disabled = false;-->
+<!--        }-->
 
-        <!-- Usunięcie crypto_field_name z formularza -->
+        <!-- Usunięcie pozycji z formularza -->
         crypto_field_div.remove();
     }
     </script>
