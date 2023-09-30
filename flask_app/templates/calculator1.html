@@ -46,8 +46,14 @@
     </div>
 
     <script>
+    function uuidv4() {
+        return "10000000-1000-4000-8000-100000000000".replace(/[018]/g, c =>
+            (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+        );
+    }
+    </script>
 
-
+    <script>
     function add_crypto_field() {
         <!-- Ustawienie zmiennych -->
         var crypto_field_select = document.getElementById("crypto-field-select");
@@ -72,8 +78,7 @@
 
         <!-- Pole do wpisania ilości kryptoaktywa -->
         var crypto_field_input = document.createElement("INPUT");
-        crypto_field_input.setAttribute("id", crypto_name);
-        crypto_field_input.setAttribute("name", crypto_name);
+        crypto_field_input.setAttribute("name", crypto_name+'-'+uuidv4());
         crypto_field_input.required = true;
         crypto_field_input.setAttribute("type", "number");
         crypto_field_input.setAttribute("step", "0.00000001");

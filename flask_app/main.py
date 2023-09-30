@@ -1,7 +1,7 @@
 import json
 import re
 
-from flask import Flask, render_template, request, flash, url_for
+from flask import Flask, render_template, request, flash, url_for, session
 from werkzeug.utils import redirect
 from config import Config
 
@@ -36,27 +36,38 @@ def calculator1():
         keys_to_check = ['Case_number', 'Owner']
         if any(len(form_data[key]) != 100 for key in keys_to_check):
             flash(f'Numer sprawy i dane właściciela muszą mieć dokładnie 100 znaków!', 'alert alert-danger')
-            return redirect(request.url, form_data=formdata)
+            # return redirect(request.url, form_data=form_data)
+            return render_template('calculator1.html', title='Kalkulator kryptowalut',
+                                   crypto_fields=get_crypto_fields(), form_data=form_data)
         allowed_characters = re.compile(r'^[a-zA-Z0-9.-/]+$')
         if not all(allowed_characters.match(form_data[key]) for key in keys_to_check):
             flash(f'Numer sprawy i dane właściciela mogą zawierać tylko znaki alfanumeryczne i symbole ,.”,-„/!"', 'alert alert-danger')
-            return redirect(request.url, form_data=formdata)
+            # return redirect(request.url, form_data=form_data)
+            return render_template('calculator1.html', title='Kalkulator kryptowalut',
+                                   crypto_fields=get_crypto_fields(), form_data=form_data)
 
         if len(request.form) == 3:
             flash(f"Nie dodano żadnego kryptoaktywa", 'alert alert-danger')
-            return redirect(request.url)
+            # return redirect(request.url)
+            return render_template('calculator1.html', title='Kalkulator kryptowalut',
+                                   crypto_fields=get_crypto_fields(), form_data=form_data)
+        print(form_data)
+        session['form_data'] = form_data
         return redirect(url_for('calculator2'))
     return render_template('calculator1.html', title='Kalkulator kryptowalut', crypto_fields=get_crypto_fields())
 
 
 @app.route('/calculator2', methods=['GET', 'POST'])
 def calculator2():
+    form_data = session.get('form_data', {})
+    print(form_data)
     if request.method == 'POST':
         if len(request.form) == 0:
             flash(f"Nie wybranego żadnego dostawcy danych", 'alert alert-danger')
             return redirect(request.url)
         return redirect(url_for('show_result'))
-    return render_template('calculator2.html', title='Kalkulator kryptowalut', markets=get_markets())
+    return render_template('calculator2.html', title='Kalkulator kryptowalut', markets=get_markets(),
+                           form_data=form_data)
 
 
 @app.route('/result', methods=['GET', 'POST'])
@@ -102,9 +113,11 @@ def add_species():
 
     return render_template('manual.html', title='Manualne wprowadzanie danych', form_fields=get_form_fields())
 
+
 @app.route('/update_directory', methods=['GET'])
 def update_directory():
     return render_template('update_directory.html', title='Edycja słownika', crypto_fields=get_crypto_fields())
+
 
 @app.route("/save", methods=["POST"])
 def save():
