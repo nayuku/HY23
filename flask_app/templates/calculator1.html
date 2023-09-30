@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 {% block content %}
     <div class="content-section" style="text-align: center; width: 1000px; margin: 0 auto;">
-        <h2><a class="article-title">OSZACUJ WARTOŚĆ KRYPTOAKTYWÓW</a></h2>
+        <h2 style="margin-bottom: 1.5rem;"><a class="article-title">OSZACUJ WARTOŚĆ KRYPTOAKTYWÓW</a></h2>
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
                 {% for category, message in messages %}
@@ -10,19 +10,36 @@
             {% endif %}
         {% endwith %}
 
-        <div class="input-group">
-            <select class="custom-select" id="crypto-field-select">
-                {% for crypto in crypto_fields %}
-                     <option>{{crypto["name"]}} ({{crypto["short_name"]}})</option>
-                {% endfor %}
-            </select>
-            <div class="input-group-append">
-                <button class="btn btn-outline-secondary" id="add-crypto-field-btn" type="button" onclick="add_crypto_field()">Dodaj kryptowalutę</button>
-            </div>
-        </div>
-
-        <hr>
         <form method=post>
+            <div class="form-group row">
+                <label class="col-sm-5 col-form-label">Nazwa organu egzekucyjnego</label>
+                <div class="col-sm-7">
+                    <input id="Enforcement_authority" name="Enforcement_authority" for="Enforcement_authority" required="" type="text" class="form-control">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-5 col-form-label">Numer sprawy</label>
+                <div class="col-sm-7">
+                    <input id="Case_number" name="Case_number" for="Case_number" required="" type="text" class="form-control">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-5 col-form-label">Dane właściciela</label>
+                <div class="col-sm-7">
+                    <input id="Owner" name="Owner" for="Owner" required="" type="text" class="form-control">
+                </div>
+            </div>
+            <div class="input-group">
+                <select class="custom-select" id="crypto-field-select">
+                    {% for crypto in crypto_fields %}
+                         <option value={{crypto["id"]}}>{{crypto["name"]}} ({{crypto["short_name"]}})</option>
+                    {% endfor %}
+                </select>
+                <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" id="add-crypto-field-btn" type="button" onclick="add_crypto_field()">Dodaj kryptowalutę</button>
+                </div>
+            </div>
+            <hr>
             <div id="form-container"></div>
             <input type=submit class="btn btn-primary" value="Dalej">
         </form>
@@ -33,7 +50,7 @@
         <!-- Ustawienie zmiennych -->
         var crypto_fields = {{ crypto_fields|tojson|safe }};
         var crypto_field_select = document.getElementById("crypto-field-select");
-        var crypto_field_name = crypto_field_select.value;
+        var crypto_field_name = crypto_field_select.options[crypto_field_select.selectedIndex].text;
         var crypto_name = String(crypto_field_name.split("(", 1)).trim()
 
         <!-- Przycisk do usunięcia pozycji -->
@@ -49,7 +66,7 @@
 
         <!-- Etykieta kryptoaktywa  -->
         var crypto_field_label = document.createElement("LABEL");
-        crypto_field_label.setAttribute("class", "col-sm-3 col-form-label");
+        crypto_field_label.setAttribute("class", "col-sm-4 col-form-label");
         crypto_field_label.innerHTML = crypto_field_name;
 
         <!-- Pole do wpisania ilości kryptoaktywa -->
@@ -59,12 +76,13 @@
         crypto_field_input.setAttribute("for", crypto_name);
         crypto_field_input.required = true;
         crypto_field_input.setAttribute("type", "number");
-        crypto_field_input.setAttribute("step", "0.000001");
+        crypto_field_input.setAttribute("step", "0.00000001");
+        crypto_field_input.setAttribute("min", "0");
         crypto_field_input.setAttribute("class", "form-control");
 
         <!-- Pojemnik dla pola z ilością kryptoaktywa -->
         var crypto_field_input_div = document.createElement("DIV");
-        crypto_field_input_div.setAttribute("class", "col-sm-8");
+        crypto_field_input_div.setAttribute("class", "col-sm-7");
         crypto_field_input_div.appendChild(crypto_field_input);
 
         <!-- Deklaracja dodawanej dynamicznie pozycji -->

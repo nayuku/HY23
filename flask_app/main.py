@@ -20,14 +20,32 @@ def get_crypto_fields(crypto_dict='./data/crypto_names.json'):
     return crypto_fields
 
 
-@app.route('/calculator', methods=['GET', 'POST'])
-def calculator():
+def get_markets(market_dict='./data/markets.json'):
+    with open(market_dict, 'r') as f:
+        markets = json.load(f)
+    return markets
+
+
+@app.route('/calculator1', methods=['GET', 'POST'])
+def calculator1():
     if request.method == 'POST':
-        if len(request.form) == 0:
+        print("---------------------------------")
+        print(request.form)
+        if len(request.form) == 3:
             flash(f"Nie dodano żadnego kryptoaktywa", 'alert alert-danger')
             return redirect(request.url)
-        # return redirect(url_for('show_result', species=json.dumps(species)))
-    return render_template('calculator.html', title='Kalkulator kryptowalut', crypto_fields=get_crypto_fields())
+        return redirect(url_for('calculator2'))
+    return render_template('calculator1.html', title='Kalkulator kryptowalut', crypto_fields=get_crypto_fields())
+
+
+@app.route('/calculator2', methods=['GET', 'POST'])
+def calculator2():
+    if request.method == 'POST':
+        if len(request.form) == 0:
+            flash(f"Nie wybranego żadnego dostawcy danych", 'alert alert-danger')
+            return redirect(request.url)
+        return redirect(url_for('show_result'))
+    return render_template('calculator2.html', title='Kalkulator kryptowalut', markets=get_markets())
 
 
 @app.route('/result', methods=['GET', 'POST'])
