@@ -10,7 +10,7 @@
             {% endif %}
         {% endwith %}
 
-        <form method=post>
+        <form method=post id="form1">
             <div class="form-group row">
                 <label class="col-sm-5 col-form-label">Nazwa organu egzekucyjnego</label>
                 <div class="col-sm-7">
@@ -46,6 +46,8 @@
     </div>
 
     <script>
+
+
     function add_crypto_field() {
         <!-- Ustawienie zmiennych -->
         var crypto_fields = {{ crypto_fields|tojson|safe }};
