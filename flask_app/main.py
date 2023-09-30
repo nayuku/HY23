@@ -36,11 +36,11 @@ def calculator1():
         keys_to_check = ['Case_number', 'Owner']
         if any(len(form_data[key]) != 100 for key in keys_to_check):
             flash(f'Numer sprawy i dane właściciela muszą mieć dokładnie 100 znaków!', 'alert alert-danger')
-            return redirect(request.url)
+            return redirect(request.url, form_data=formdata)
         allowed_characters = re.compile(r'^[a-zA-Z0-9.-/]+$')
         if not all(allowed_characters.match(form_data[key]) for key in keys_to_check):
             flash(f'Numer sprawy i dane właściciela mogą zawierać tylko znaki alfanumeryczne i symbole ,.”,-„/!"', 'alert alert-danger')
-            return redirect(request.url)
+            return redirect(request.url, form_data=formdata)
 
         if len(request.form) == 3:
             flash(f"Nie dodano żadnego kryptoaktywa", 'alert alert-danger')
