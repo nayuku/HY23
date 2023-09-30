@@ -31,7 +31,6 @@
       </table>
       <button id="add" class="btn btn-success">Dodaj</button>
       <input type="submit" value="Zapisz zmiany" class="btn btn-primary" onclick="save_json()">
-      <p id="error" style="color: red;"></p>
       </form>
 
     </div>
@@ -66,8 +65,6 @@
             rowData.name = row.querySelector('[name=name]').value;
             rowData.short_name = row.querySelector('[name=short_name]').value;
             if (!rowData.name || !rowData.short_name) {
-              var errorElement = document.getElementById('error');
-              errorElement.textContent = 'Uzupełnij wszystkie pola!';
               return
             }
             tableData.push(rowData);
