@@ -4,6 +4,8 @@ import re
 from flask import Flask, render_template, request, flash, url_for, session
 from werkzeug.utils import redirect
 from config import Config
+from collections import defaultdict
+from decimal import Decimal
 
 
 app = Flask(__name__, static_url_path=Config.flask_static_url_path)
@@ -36,23 +38,30 @@ def calculator1():
         keys_to_check = ['Case_number', 'Owner']
         if any(len(form_data[key]) != 100 for key in keys_to_check):
             flash(f'Numer sprawy i dane właściciela muszą mieć dokładnie 100 znaków!', 'alert alert-danger')
-            # return redirect(request.url, form_data=form_data)
             return render_template('calculator1.html', title='Kalkulator kryptowalut',
                                    crypto_fields=get_crypto_fields(), form_data=form_data)
         allowed_characters = re.compile(r'^[a-zA-Z0-9.-/]+$')
         if not all(allowed_characters.match(form_data[key]) for key in keys_to_check):
             flash(f'Numer sprawy i dane właściciela mogą zawierać tylko znaki alfanumeryczne i symbole ,.”,-„/!"', 'alert alert-danger')
-            # return redirect(request.url, form_data=form_data)
             return render_template('calculator1.html', title='Kalkulator kryptowalut',
                                    crypto_fields=get_crypto_fields(), form_data=form_data)
 
         if len(request.form) == 3:
             flash(f"Nie dodano żadnego kryptoaktywa", 'alert alert-danger')
-            # return redirect(request.url)
             return render_template('calculator1.html', title='Kalkulator kryptowalut',
                                    crypto_fields=get_crypto_fields(), form_data=form_data)
-        print(form_data)
-        session['form_data'] = form_data
+
+        # delete_prefix and sum coin values
+        result_dict = {}
+        grouped_dict = defaultdict(int)
+        for key, value in form_data.items():
+            if key in {'Case_number', 'Enforcement_authority', 'Owner'}:
+                result_dict[key] = value
+            else:
+                prefix = key.split('-')[0]
+                grouped_dict[prefix] += Decimal(value)
+        result_dict.update(grouped_dict)
+        session['form_data'] = result_dict
         return redirect(url_for('calculator2'))
     return render_template('calculator1.html', title='Kalkulator kryptowalut', crypto_fields=get_crypto_fields())
 
