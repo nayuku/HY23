@@ -11,7 +11,7 @@
 
     <div class="content-section" style="text-align: center; width: 1000px; margin: 0 auto;">
         <h2><a class="article-title">Edycja słownika</a></h2>
-      <form id="dataForm">
+      <form id="dataForm" onsubmit="return false">
       <table border="1" id="dataTable">
         <thead>
           <tr>
@@ -83,6 +83,7 @@
           }).then(response => response.json()).then(data => {
             console.log('Data saved successfully:', data);
           });
+          return false;
         };
     </script>
 {% endblock %}
