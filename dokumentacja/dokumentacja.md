@@ -11,6 +11,9 @@ Formularz
 
 Umożliwia oszacowanie wartości dla podanego portfelu dla wprowadzonych danych
 
+## Założenia
+Długa nazwa jest unikalna
+
 ## Wymagania funkcjonalne
 -. Automatyczne pobieranie danych wartości kryptowaluty w PLN ($)
 

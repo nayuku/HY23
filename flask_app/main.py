@@ -2,7 +2,7 @@ import json
 
 from flask import Flask, render_template, request, flash, url_for
 from werkzeug.utils import redirect
-from flask_app.config import Config
+from config import Config
 
 app = Flask(__name__, static_url_path=Config.flask_static_url_path)
 app.config.from_object('config.BaseConfig')
