@@ -132,7 +132,6 @@ def update_directory():
 
 @app.route("/save", methods=["POST"])
 def save():
-    print('works')
     data = request.json
     for i, record in enumerate(data, start=1):
         record['id'] = i
