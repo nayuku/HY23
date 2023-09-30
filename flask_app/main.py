@@ -73,6 +73,11 @@ def add_species():
 
     return render_template('manual.html', title='Manualne wprowadzanie danych', form_fields=get_form_fields())
 
+@app.route('/update_directory', methods=['GET'])
+def update_directory(crypto_dict='./data/crypto_names.json'):
+    with open(crypto_dict, 'r') as f:
+        data = json.load(f)
+    return render_template('update_directory.html', title='Edycja słownika')
 
 if __name__ == '__main__':
     app.run(port=Config.flask_port)
