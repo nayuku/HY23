@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 {% block content %}
     <div class="content-section" style="text-align: center; width: 1000px; margin: 0 auto;">
-        <h2 style="margin-bottom: 1.5rem;"><a class="article-title">OSZACUJ WARTOŚĆ KRYPTOAKTYWÓW</a></h2>
+        <h2 style="margin-bottom: 1.5rem;"><a class="article-title">OKREŚL ŹRÓDŁA DANYCH KURSOWYCH</a></h2>
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
                 {% for category, message in messages %}
@@ -75,9 +75,14 @@
 
     <script>
     function add_manual_data() {
+        var control_flag = true;
+
         <!-- Ustawienie zmiennych -->
         var manual_address_url = document.getElementById("manual-address-url");
         var manual_market_name = document.getElementById("manual-market-name");
+        if (manual_address_url.value == "" || manual_market_name.value == "") {
+            control_flag = false;
+        }
 
         <!-- Przycisk do usunięcia pozycji -->
         var remove_manual_data_button_span = document.createElement("SPAN");
@@ -109,6 +114,9 @@
         var manual_{{asset}}_rate_value = document.getElementById("manual-{{asset}}-rate-value");
         var manual_{{asset}}_currency_select = document.getElementById("manual-{{asset}}-currency");
         var manual_{{asset}}_currency = manual_{{asset}}_currency_select.options[manual_{{asset}}_currency_select.selectedIndex].text;
+        if (manual_{{asset}}_rate_value.value == "" || manual_{{asset}}_currency == "") {
+            control_flag = false;
+        }
         <!-- Etykieta strzałki -->
         var manual_data_{{asset}}_arrow_label = document.createElement("LABEL");
         manual_data_{{asset}}_arrow_label.setAttribute("class", "col-sm-2 col-form-label");
@@ -137,16 +145,17 @@
         manual_data_input.setAttribute("value", manual_data_input_value);
         manual_data_div.appendChild(manual_data_input);
 
-        <!-- Dodanie wprowadzonych manualnie danych do formularza -->
-        var manual_data_form_container = document.getElementById("manual-data-form-container");
-        manual_data_form_container.appendChild(manual_data_div);
-
-        <!-- Wyczyszczenie wprowadzonych wartości -->
-        manual_address_url.value = ""
-        manual_market_name.value = ""
-        {% for asset in assets %}
-        manual_{{asset}}_rate_value.value = ""
-        {% endfor %}
+        if (control_flag) {
+            <!-- Dodanie wprowadzonych manualnie danych do formularza -->
+            var manual_data_form_container = document.getElementById("manual-data-form-container");
+            manual_data_form_container.appendChild(manual_data_div);
+            <!-- Wyczyszczenie wprowadzonych wartości -->
+            manual_address_url.value = ""
+            manual_market_name.value = ""
+            {% for asset in assets %}
+            manual_{{asset}}_rate_value.value = ""
+            {% endfor %}
+        }
 
         return false;
     }
