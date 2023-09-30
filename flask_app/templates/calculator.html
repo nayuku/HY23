@@ -1,0 +1,118 @@
+{% extends "layout.html" %}
+{% block content %}
+    <div class="content-section" style="text-align: center; width: 1000px; margin: 0 auto;">
+        <h2><a class="article-title">OSZACUJ WARTOŚĆ KRYPTOAKTYWÓW</a></h2>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="{{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <div class="input-group">
+            <select class="custom-select" id="crypto-field-select">
+                {% for crypto in crypto_fields %}
+                     <option>{{crypto["name"]}} ({{crypto["short_name"]}})</option>
+                {% endfor %}
+            </select>
+            <div class="input-group-append">
+                <button class="btn btn-outline-secondary" id="add-crypto-field-btn" type="button" onclick="add_crypto_field()">Dodaj kryptowalutę</button>
+            </div>
+        </div>
+
+        <hr>
+        <form method=post>
+            <div id="form-container"></div>
+            <input type=submit class="btn btn-primary" value="Dalej">
+        </form>
+    </div>
+
+    <script>
+    function add_crypto_field() {
+        <!-- Ustawienie zmiennych -->
+        var crypto_fields = {{ crypto_fields|tojson|safe }};
+        var crypto_field_select = document.getElementById("crypto-field-select");
+        var crypto_field_name = crypto_field_select.value;
+        var crypto_name = String(crypto_field_name.split("(", 1)).trim()
+
+        <!-- Przycisk do usunięcia pozycji -->
+        var remove_crypto_field_button_span = document.createElement("SPAN");
+        remove_crypto_field_button_span.setAttribute("aria-hidden", "true");
+        remove_crypto_field_button_span.innerHTML = "&times;";
+
+        var remove_crypto_field_button = document.createElement("BUTTON");
+        remove_crypto_field_button.setAttribute("type", "button");
+        remove_crypto_field_button.setAttribute("class", "col-sm-1 close");
+        remove_crypto_field_button.setAttribute("aria-label", "Remove");
+        remove_crypto_field_button.appendChild(remove_crypto_field_button_span);
+
+        <!-- Etykieta kryptoaktywa  -->
+        var crypto_field_label = document.createElement("LABEL");
+        crypto_field_label.setAttribute("class", "col-sm-3 col-form-label");
+        crypto_field_label.innerHTML = crypto_field_name;
+
+        <!-- Pole do wpisania ilości kryptoaktywa -->
+        var crypto_field_input = document.createElement("INPUT");
+        crypto_field_input.setAttribute("id", crypto_name);
+        crypto_field_input.setAttribute("name", crypto_name);
+        crypto_field_input.setAttribute("for", crypto_name);
+        crypto_field_input.required = true;
+        crypto_field_input.setAttribute("type", "number");
+        crypto_field_input.setAttribute("step", "0.000001");
+        crypto_field_input.setAttribute("class", "form-control");
+
+        <!-- Pojemnik dla pola z ilością kryptoaktywa -->
+        var crypto_field_input_div = document.createElement("DIV");
+        crypto_field_input_div.setAttribute("class", "col-sm-8");
+        crypto_field_input_div.appendChild(crypto_field_input);
+
+        <!-- Deklaracja dodawanej dynamicznie pozycji -->
+        var crypto_field_div = document.createElement("DIV");
+        crypto_field_div.setAttribute("class", "form-group row");
+        crypto_field_div.appendChild(remove_crypto_field_button);
+        crypto_field_div.appendChild(crypto_field_label);
+        crypto_field_div.appendChild(crypto_field_input_div);
+        remove_crypto_field_button.addEventListener("click", function(){remove_crypto_field(crypto_field_div);}, false);
+
+        <!-- Dodanie pozycji do formularza -->
+        var form_container = document.getElementById("form-container");
+        form_container.appendChild(crypto_field_div);
+
+        <!-- Uaktualnienie crypto_field_select -->
+        crypto_field_select.remove(crypto_field_select.selectedIndex);
+        if (crypto_field_select.options.length == 0) {
+            add_crypto_field_button = document.getElementById("add-crypto-field-btn");
+            add_crypto_field_button.disabled = true;
+            crypto_field_select.disabled = true;
+        }
+    }
+    </script>
+
+    <script>
+    function remove_crypto_field(crypto_field_div) {
+        <!-- Ustawienie zmiennych -->
+        var crypto_field_labels = crypto_field_div.getElementsByTagName("LABEL");
+        var crypto_field_select = document.getElementById("crypto-field-select");
+        for (var i = 0; i < crypto_field_labels.length; i++) {
+            crypto_field_label = crypto_field_labels[i];
+            crypto_field_name = (crypto_field_label.innerText || crypto_field_label.textContent);
+            <!-- Przywrócenie kryptoaktywa do crypto_field_select -->
+            var crypto_field_option = document.createElement("option");
+            crypto_field_option.text = crypto_field_name;
+            crypto_field_select.add(crypto_field_option);
+        }
+
+        <!-- Uaktualnienie crypto_field_select -->
+        if (crypto_field_select.disabled && crypto_field_select.options.length > 0) {
+            add_crypto_field_button = document.getElementById("add-crypto-field-btn");
+            add_crypto_field_button.disabled = false;
+            crypto_field_select.disabled = false;
+        }
+
+        <!-- Usunięcie crypto_field_name z formularza -->
+        crypto_field_div.remove();
+    }
+    </script>
+
+{% endblock %}
