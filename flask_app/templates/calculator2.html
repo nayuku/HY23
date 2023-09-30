@@ -13,34 +13,39 @@
         <div class="form-group row">
             <legend style="text-align: left;" class="col-sm-7">Manualne definiowanie kursów kryptoaktywów</legend>
         </div>
-        <div id="manual-data-form-container">
+        <div id="manual-data-adder">
             <div class="form-group row">
-                <label class="col-sm-5 col-form-label">Adres URL</label>
-                <div class="col-sm-7">
-                    <input id="address_url" class="form-control" name="address_url" type="text" required="">
+                <label class="col-sm-6 col-form-label">Adres URL</label>
+                <div class="col-sm-6">
+                    <input id="manual_address_url" class="form-control" name="manual_address_url" type="text" required="">
                 </div>
             </div>
             <div class="form-group row">
-                <label class="col-sm-5 col-form-label">Nazwa giełdy/kantoru</label>
-                <div class="col-sm-7">
-                    <input id="market_name" class="form-control" name="market_name" type="text" required="">
+                <label class="col-sm-6 col-form-label">Nazwa giełdy/kantoru</label>
+                <div class="col-sm-6">
+                    <input id="manual_market_name" class="form-control" name="manual_market_name" type="text" required="">
                 </div>
             </div>
+            {% for asset in assets %}
             <div class="form-group row">
-                <label class="col-sm-5 col-form-label">Wysokość kursu</label>
-                <div class="col-sm-5">
-                    <input id="rate_value" name="rate_value" type="number" step="0.00000001" min="0" class="form-control" required="">
+                <label class="col-sm-6 col-form-label">Wysokość kursu {{asset}}</label>
+                <div class="col-sm-4">
+                    <input id="manual_{{asset}}_rate_value" name="manual_{{asset}}_rate_value" type="number" step="0.00000001" min="0" class="form-control" required="">
                 </div>
                 <div class="col-sm-2">
-                    <select id="currency" class="custom-select" name="currency" required="" >
+                    <select id="manual_{{asset}}_currency" class="custom-select" name="manual_{{asset}}_currency" required="" >
                         <option value="PLN">PLN</option>
                         <option value="USD">USD</option>
                     </select>
                 </div>
             </div>
+            {% endfor %}
+            <button class="btn btn-outline-secondary" id="add-manual-data-btn" type="button" onclick="add_data_provider()">Dodaj manualne dane</button>
+            <hr>
         </div>
 
         <form method=post>
+            <div id="manual-data-form-container"> </div>
             <fieldset>
                 <legend style="text-align: left;">Dostawcy kursów kryptoaktywów czasu rzecywistego</legend>
                 <div class="input-group">
@@ -50,12 +55,12 @@
                         {% endfor %}
                     </select>
                     <div class="input-group-append">
-                        <button class="btn btn-outline-secondary" id="add-market-btn" type="button" onclick="add_data_provider()">Dodaj dostawcę</button>
+                        <button class="btn btn-outline-secondary" id="add-market-btn" type="button" onclick="add_manual_data()">Dodaj dostawcę</button>
                     </div>
                 </div>
             </fieldset>
-            <div id="market-form-container"></div>
             <hr>
+            <div id="market-form-container"></div>
             <input type=submit class="btn btn-primary" value="Dalej">
         </form>
     </div>

@@ -66,7 +66,9 @@ def calculator2():
             flash(f"Nie wybranego żadnego dostawcy danych", 'alert alert-danger')
             return redirect(request.url)
         return redirect(url_for('show_result'))
-    return render_template('calculator2.html', title='Kalkulator kryptowalut', markets=get_markets(),
+    assets = {key: value for key, value in form_data.items()
+              if key not in ('Case_number', 'Enforcement_authority', 'Owner')}
+    return render_template('calculator2.html', title='Kalkulator kryptowalut', assets=assets, markets=get_markets(),
                            form_data=form_data)
 
 
