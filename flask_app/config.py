@@ -10,6 +10,7 @@ class BaseConfig(object):
     FLASK_HTPASSWD_PATH = '/secret/.htpasswd'
     FLASK_SECRET = SECRET_KEY
     DATA_FOLDER = './data'
+    CRYPTO_NAMES = './data/crypto_names.json'
     REPORT_FOLDER = './reports'
 
 

@@ -1,0 +1,58 @@
+{% extends "layout.html" %}
+{% block content %}
+    <style>
+      table {
+        margin-left: auto;
+        margin-right: auto;
+        text-align: center;
+
+      }
+    </style>
+
+    <div class="content-section" style="text-align: center; width: 1000px; margin: 0 auto;">
+        <h2><a class="article-title">Edycja słownika</a></h2>
+      <form id="dataForm"></form>
+      <table border="1">
+        <thead>
+          <tr>
+            <th>Nazwa</th>
+            <th>Skrót</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in crypto_fields %}
+          <tr>
+            <td><input type="text" value={{ row.name }}></td>
+            <td><input type="text" value={{ row.short_name }}></td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      <input type="submit" value="Zapisz zmiany" class="btn btn-primary">
+      </form>
+    </div>
+    <script>
+      document.getElementById('dataForm').addEventListener('submit', function (e) {
+          e.preventDefault();
+
+          let tableData = [];
+          document.querySelectorAll('tbody tr').forEach(row => {
+            let rowData = {};
+            rowData.name = row.querySelector('[name=name]').value;
+            rowData.age = row.querySelector('[name=short_name]').value;
+            tableData.push(rowData);
+          });
+
+          // Send tableData array to server via Fetch API
+          fetch('/save', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(tableData)
+          }).then(response => response.json()).then(data => {
+            console.log('Data saved successfully:', data);
+          });
+        });
+    </script>
+{% endblock %}

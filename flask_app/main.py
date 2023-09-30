@@ -2,7 +2,7 @@ import json
 
 from flask import Flask, render_template, request, flash, url_for
 from werkzeug.utils import redirect
-from flask_app.config import Config
+from config import Config
 
 app = Flask(__name__, static_url_path=Config.flask_static_url_path)
 app.config.from_object('config.BaseConfig')
@@ -90,6 +90,20 @@ def add_species():
         flash(f"Dane zostały dodane", 'alert alert-success')
 
     return render_template('manual.html', title='Manualne wprowadzanie danych', form_fields=get_form_fields())
+
+@app.route('/update_directory', methods=['GET'])
+def update_directory():
+    return render_template('update_directory.html', title='Edycja słownika', crypto_fields=get_crypto_fields())
+
+@app.route("/save", methods=["POST"])
+def save():
+    print('works')
+    data = request.json
+    for i, record in enumerate(data, start=1):
+        record['id'] = i
+    with open(app.config['CRYPTO_NAMES'], 'w') as f:
+        json.dump(data, f)
+    return {"status": "success"}, 200
 
 
 if __name__ == '__main__':
