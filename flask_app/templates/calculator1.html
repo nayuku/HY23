@@ -114,17 +114,17 @@
 
     <script>
     function remove_crypto_field(crypto_field_div) {
-        <!-- Ustawienie zmiennych -->
-        var crypto_field_labels = crypto_field_div.getElementsByTagName("LABEL");
-        var crypto_field_select = document.getElementById("crypto-field-select");
-        for (var i = 0; i < crypto_field_labels.length; i++) {
-            crypto_field_label = crypto_field_labels[i];
-            crypto_field_name = (crypto_field_label.innerText || crypto_field_label.textContent);
-            <!-- Przywrócenie kryptoaktywa do crypto_field_select -->
-            var crypto_field_option = document.createElement("option");
-            crypto_field_option.text = crypto_field_name;
-            crypto_field_select.add(crypto_field_option);
-        }
+<!--        &lt;!&ndash; Ustawienie zmiennych &ndash;&gt;-->
+<!--        var crypto_field_labels = crypto_field_div.getElementsByTagName("LABEL");-->
+<!--        var crypto_field_select = document.getElementById("crypto-field-select");-->
+<!--        for (var i = 0; i < crypto_field_labels.length; i++) {-->
+<!--            crypto_field_label = crypto_field_labels[i];-->
+<!--            crypto_field_name = (crypto_field_label.innerText || crypto_field_label.textContent);-->
+<!--            &lt;!&ndash; Przywrócenie kryptoaktywa do crypto_field_select &ndash;&gt;-->
+<!--            var crypto_field_option = document.createElement("option");-->
+<!--            crypto_field_option.text = crypto_field_name;-->
+<!--            crypto_field_select.add(crypto_field_option);-->
+<!--        }-->
 
 <!--        &lt;!&ndash; Uaktualnienie crypto_field_select &ndash;&gt;-->
 <!--        if (crypto_field_select.disabled && crypto_field_select.options.length > 0) {-->
