@@ -15,3 +15,7 @@ jaka wartość w zł
 
 na początku auto
 potem manual
+
+
+weryfikacja tekstu:
+n

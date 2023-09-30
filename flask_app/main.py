@@ -1,8 +1,10 @@
 import json
+import re
 
 from flask import Flask, render_template, request, flash, url_for
 from werkzeug.utils import redirect
 from config import Config
+
 
 app = Flask(__name__, static_url_path=Config.flask_static_url_path)
 app.config.from_object('config.BaseConfig')
@@ -30,7 +32,16 @@ def get_markets(market_dict='./data/markets.json'):
 def calculator1():
     if request.method == 'POST':
         print("---------------------------------")
-        print(request.form)
+        form_data = request.form.to_dict()
+        keys_to_check = ['Case_number', 'Owner']
+        if any(len(form_data[key]) != 100 for key in keys_to_check):
+            flash(f'Numer sprawy i dane właściciela muszą mieć dokładnie 100 znaków!', 'alert alert-danger')
+            return redirect(request.url, form_data=formdata)
+        allowed_characters = re.compile(r'^[a-zA-Z0-9.-/]+$')
+        if not all(allowed_characters.match(form_data[key]) for key in keys_to_check):
+            flash(f'Numer sprawy i dane właściciela mogą zawierać tylko znaki alfanumeryczne i symbole ,.”,-„/!"', 'alert alert-danger')
+            return redirect(request.url, form_data=formdata)
+
         if len(request.form) == 3:
             flash(f"Nie dodano żadnego kryptoaktywa", 'alert alert-danger')
             return redirect(request.url)
