@@ -51,7 +51,7 @@ def calculator1():
                                    crypto_fields=get_crypto_fields(), form_data=form_data, authorities=get_authorities())
         allowed_characters = re.compile(r'^[a-zA-Z0-9\.-/]+$')
         if not all(allowed_characters.match(form_data[key]) for key in keys_to_check):
-            flash(f'Numer sprawy i dane właściciela mogą zawierać tylko znaki alfanumeryczne i symbole ,.”,-„/!"', 'alert alert-danger')
+            flash(f'Numer sprawy i dane właściciela mogą zawierać tylko znaki alfanumeryczne i symbole ,.”,-„/"', 'alert alert-danger')
             return render_template('calculator1.html', title='Kalkulator kryptowalut',
                                    crypto_fields=get_crypto_fields(), form_data=form_data, authorities=get_authorities())
 
