@@ -17,7 +17,7 @@ class KucoinSpotDataProvider(BaseDataProvider):
         prices = []
         for ticker in tickers:
             if ticker["symbol"].startswith(get_short_name(crypto) + "-" + currency):
-                prices.append(Decimal(ticker["averagePrice"]))
+                prices.append(Decimal(ticker["last"]))
         avg_price = None
         if len(prices) > 0:
             avg_price = sum(prices) / Decimal(len(prices))

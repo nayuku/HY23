@@ -17,7 +17,7 @@ class BinanceSpotDataProvider(BaseDataProvider):
         prices = []
         for ticker in tickers:
             if ticker["symbol"].startswith(get_short_name(crypto) + currency) and Decimal(
-                    ticker["weightedAvgPrice"]) > 0:
+                    ticker["lastPrice"]) > 0:
                 prices.append(Decimal(ticker["weightedAvgPrice"]))
         avg_price = None
         if len(prices) > 0:
