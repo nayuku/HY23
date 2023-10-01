@@ -1,6 +1,6 @@
-# HY23
+# HY23 - Kryptokasa.gov
 
-TODO
+Aplikacja automatyzująca proces wyceny kryptoaktywów.
 
 - virtual env to isolate project dependencies (from main folder)
 ```
