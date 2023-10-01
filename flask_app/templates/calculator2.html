@@ -138,7 +138,7 @@
             +'"name":'+'"'+manual_market_name.value+'"'
             +',"address_url":'+'"'+manual_address_url.value+'"'
             {% for asset in assets %}
-            +',"'+"{{asset}}"+'":'+'"'+manual_{{asset}}_rate_value.value+' '+manual_{{asset}}_currency+'"'
+            +',"'+"{{asset.replace("_"," ")}}"+'":'+'"'+manual_{{asset}}_rate_value.value+' '+manual_{{asset}}_currency+'"'
             {% endfor %}
         +'}';
         console.log(manual_data_input_value);

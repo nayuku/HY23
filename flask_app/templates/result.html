@@ -2,33 +2,52 @@
 {% block content %}
     <div class="content-section" style="text-align: center; width: 1000px; margin: 0 auto;">
         <div class="row" style="width: 1000px; margin: 0 auto;">
-            <button class="btn btn-primary hBack col-sm-1" type="button" onclick="location.href='find_species';">Wróć</button>
+            <button class="btn btn-primary hBack col-sm-1" type="button" onclick="location.href='calculator1';">Wróć</button>
             <div class="col-sm-11" align="center">
-                <h2><a class="article-title ">Wyniki</a></h2>
+                <h2><a class="article-title ">Szacowanie wartości kryptoaktywów</a></h2>
             </div>
         </div>
-        {% if species|length > 0 %}
-            <table class="table">
-            <thead class="thead-light">
-                <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Gatunek</th>
-                </tr>
-            </thead>
-            <tbody>
-            {% for animal in species %}
-                <tr>
-                    <th scope="row">{{ loop.index }}</th>
-                    <td>{{ animal }}</td>
-                </tr>
-            {% endfor %}
-            </tbody>
-            </table>
-        {% else %}
-            <p style="color: red">Nie znaleziono danych!</p>
-        {% endif %}
+        <hr>
+        <div class="form-group row">
+            <label class="col-sm-1 col-form-label" style="text-align: left;">ID</label>
+            <label class="col-sm-5 col-form-label">{{raport_id}}</label>
+            <label class="col-sm-1 col-form-label" style="text-align: left;">Data wykonania</label>
+            <label class="col-sm-5 col-form-label">{{raport_date}}</label>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-1 col-form-label" style="text-align: left;">Numer sprawy</label>
+            <label class="col-sm-5 col-form-label" style="word-break: break-all;">{{form_data1["Case_number"]}}</label>
+            <label class="col-sm-1 col-form-label" style="text-align: left;">Właściciel</label>
+            <label class="col-sm-5 col-form-label" style="word-break: break-all;">{{form_data1["Owner"]}}</label>
+        </div>
+        <hr>
+        <div class="form-group row">
+            <label class="col-sm-5 col-form-label" style="text-align: left;">Szacunkowa wartość kryptoaktywów:</label>
+            <label class="col-sm-7 col-form-label" style="word-break: break-all;">{{portfolio_value}}</label>
+        </div>
+        <hr>
+<!--        {% if species|length > 0 %}-->
+<!--            <table class="table">-->
+<!--            <thead class="thead-light">-->
+<!--                <tr>-->
+<!--                    <th scope="col">#</th>-->
+<!--                    <th scope="col">Gatunek</th>-->
+<!--                </tr>-->
+<!--            </thead>-->
+<!--            <tbody>-->
+<!--            {% for animal in species %}-->
+<!--                <tr>-->
+<!--                    <th scope="row">{{ loop.index }}</th>-->
+<!--                    <td>{{ animal }}</td>-->
+<!--                </tr>-->
+<!--            {% endfor %}-->
+<!--            </tbody>-->
+<!--            </table>-->
+<!--        {% else %}-->
+<!--            <p style="color: red">Nie znaleziono danych!</p>-->
+<!--        {% endif %}-->
     </div>
-
+/
     <script>
     function goBack() {
       window.history.back();
