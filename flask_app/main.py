@@ -110,7 +110,7 @@ def calculate_auto_market_values(assets, value):
         data_provider = ZondaSpotDataProvider()
         pass
     else:
-        # TODO: zwrócić komunikat błędu, bo nie wspieramy danego data provider-a
+        # TODO: zwrócić komunikat błędu, bo nie wspieramy wybranego dostawcy danych
         return None
     for asset in assets:
         currency = "PLN"
@@ -180,7 +180,7 @@ def calculator2():
 def calculate_asset_values(assets, portfolio_values):
     asset_values = []
     for asset_name in assets:
-        asset = {"name": asset_name, "amount": 0, "markets": "", "avg_USD_price": 0}
+        asset = {"name": asset_name, "amount": 0, "markets": "", "avg_USD_price": 0, "pln_values": []}
         for values in portfolio_values:
             if len(values[asset_name].keys()) > 0:
                 asset["amount"] = values[asset_name]["amount"]
@@ -188,14 +188,21 @@ def calculate_asset_values(assets, portfolio_values):
                     asset["markets"] = '"'+values["name"]+'"'
                 else:
                     asset["markets"] = asset["markets"] + ", " + '"'+values["name"]+'"'
+                asset["pln_values"].append(values[asset_name]["value"])
                 asset["avg_USD_price"] = decimal.Decimal(values[asset_name]["usd_to_pln"]).quantize(Decimal('0.00'))
         asset_values.append(asset)
     return asset_values
 
 
-def calculate_portfolio_value():
-    # TODO: Zaimplementować
-    return 0
+def calculate_portfolio_value(asset_values):
+    portfolio_value = decimal.Decimal(0)
+    for asset in asset_values:
+        pln_value_sum = decimal.Decimal(0)
+        for pln_value in asset["pln_values"]:
+            pln_value_sum += decimal.Decimal(pln_value)
+        avg_value = pln_value_sum / decimal.Decimal(len(asset["pln_values"]))
+        portfolio_value += avg_value
+    return str(portfolio_value.quantize(Decimal('0.00')))+" PLN"
 
 
 @app.route('/result', methods=['GET', 'POST'])
@@ -207,7 +214,7 @@ def show_result():
     asset_values = calculate_asset_values(assets, portfolio_values)
     return render_template('result.html', title='Szacowanie wartości kryptoaktywów', raport_id=str(uuid.uuid4()),
                            raport_date=datetime.datetime.now().strftime("%d.%m.%Y"), case_number=form_data1["Case_number"],
-                           owner=form_data1["Owner"], portfolio_value=calculate_portfolio_value(), assets=assets, asset_values=asset_values, portfolio_values=portfolio_values)
+                           owner=form_data1["Owner"], portfolio_value=calculate_portfolio_value(asset_values), assets=assets, asset_values=asset_values, portfolio_values=portfolio_values)
 
 
 @app.route('/update_directory', methods=['GET'])

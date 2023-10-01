@@ -70,7 +70,7 @@
                     <th scope="row">{{ loop.index }}</th>
                     <td>{{ values["name"] }}</td>
                     <td>{{ asset }}</td>
-                    <td>{{ 'Tak' if values[asset] else 'Nie dotyczy' }}</td>
+                    <td>{{ 'Tak' if values[asset] else 'Nie' }}</td>
                     <td>{{ values[asset]['rate_usd'] if values[asset] else 'Nie dotyczy' }}</td>
                     <td>{{ values[asset]['rate_pln'] if values[asset] else 'Nie dotyczy' }}</td>
                     <td>{{ values[asset]['value'] if values[asset] else 'Nie dotyczy' }}</td>
