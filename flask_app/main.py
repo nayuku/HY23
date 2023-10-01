@@ -10,8 +10,7 @@ from config import Config
 from collections import defaultdict
 from decimal import Decimal
 
-from rate_data_providers import BinanceSpotDataProvider, KucoinSpotDataProvider, ZondaSpotDataProvider
-
+from rate_data_providers import BinanceSpotDataProvider, KucoinSpotDataProvider, ZondaSpotDataProvider, get_rate
 
 app = Flask(__name__, static_url_path=Config.flask_static_url_path)
 app.config.from_object('config.BaseConfig')
@@ -102,6 +101,7 @@ def calculate_manual_market_values(assets, value):
 
 def calculate_auto_market_values(assets, value):
     # TODO: pobierać kurs USD z api NBP
+    # get_rate('usd')
     usd_to_pln = Decimal(4.3)
     auto_market_values = {"name": value, "type": "auto"}
     data_provider = None
