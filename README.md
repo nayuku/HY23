@@ -11,10 +11,9 @@ venv\Scripts\activate.bat
 ```
 pip install -r requirements.txt
 ```
-- run app (from app folder)
+- run app (from flask_app folder)
 ```
-uvicorn main:app --reload
-http://127.0.0.1:8000
+python main.py
 ```
 
 - add new dependencies
