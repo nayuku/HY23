@@ -1,3 +1,4 @@
+import decimal
 import json
 import re
 import uuid
@@ -85,12 +86,17 @@ def calculate_manual_market_values(assets, value):
             # TODO: zwrócić komunikat błędu, bo nie powinniśmy tu trafić, trzeba zawsze określić kurs dla każdego kryptoaktywa
             break
         else:
+            rate_usd = "Nie dotyczy"
+            rate_pln = "Nie dotyczy"
             rate = market[asset].split(" ")[0]
             currency = market[asset].split(" ")[1]
             value = Decimal(assets[asset])*Decimal(rate)
             if currency == "USD":
+                rate_usd = Decimal(rate).quantize(Decimal('0.00'))
                 value = value * usd_to_pln
-            manual_market_values[asset] = {"amount": assets[asset], "rate": rate, "currency": currency, "usd_to_pln": usd_to_pln, "value": value}
+            else:
+                rate_pln = Decimal(rate).quantize(Decimal('0.00'))
+            manual_market_values[asset] = {"amount": assets[asset], "rate": rate, "currency": currency, "usd_to_pln": usd_to_pln, "rate_usd": rate_usd, "rate_pln": rate_pln, "value": value.quantize(Decimal('0.00'))}
     return manual_market_values
 
 
@@ -117,12 +123,17 @@ def calculate_auto_market_values(assets, value):
             rate = data_provider.get_rate_value(asset, currency)
         if rate is None:
             # Giełda nie obraca danym kryptoaktywem
-            break
+            auto_market_values[asset] = {}
         else:
+            rate_usd = "Nie dotyczy"
+            rate_pln = "Nie dotyczy"
             value = Decimal(assets[asset]) * Decimal(rate)
             if currency == "USD":
+                rate_usd = Decimal(rate).quantize(Decimal('0.00'))
                 value = value * usd_to_pln
-            auto_market_values[asset] = {"amount": assets[asset], "rate": rate, "currency": currency, "usd_to_pln": usd_to_pln, "value": value}
+            else:
+                rate_pln = Decimal(rate).quantize(Decimal('0.00'))
+            auto_market_values[asset] = {"amount": assets[asset], "rate": rate, "currency": currency, "usd_to_pln": usd_to_pln, "rate_usd": rate_usd, "rate_pln": rate_pln, "value": value.quantize(Decimal('0.00'))}
     return auto_market_values
 
 
@@ -143,7 +154,7 @@ def is_portfolio_values_correct(form_data1, portfolio_values):
     for asset in assets:
         valid_flag = False
         for values in portfolio_values:
-            if asset in list(values.keys()):
+            if len(values[asset].keys()) > 0:
                 valid_flag = True
                 break
         if not valid_flag:
@@ -160,7 +171,7 @@ def calculator2():
             return redirect(request.url)
         portfolio_values = calculate_portfolio_values(form_data, request.form.to_dict())
         if not is_portfolio_values_correct(form_data, portfolio_values):
-            flash(f"Wybrani dostawcy danych nie obracają przynajmniej jedną z badanych kryptowalut. Zdefiniuj manualnie kursy kryptowalut.", 'alert alert-danger')
+            flash(f"Wybrani dostawcy danych nie obsługują przynajmniej jednej z badanych kryptowalut. Zdefiniuj manualnie kursy kryptowalut!", 'alert alert-danger')
             return redirect(request.url)
         session['form_data2'] = request.form.to_dict()
         session['portfolio_values'] = portfolio_values
@@ -170,15 +181,37 @@ def calculator2():
                            form_data=form_data)
 
 
+def calculate_asset_values(assets, portfolio_values):
+    asset_values = []
+    for asset_name in assets:
+        asset = {"name": asset_name, "amount": 0, "markets": "", "avg_USD_price": 0}
+        for values in portfolio_values:
+            if len(values[asset_name].keys()) > 0:
+                asset["amount"] = values[asset_name]["amount"]
+                if asset["markets"] == "":
+                    asset["markets"] = '"'+values["name"]+'"'
+                else:
+                    asset["markets"] = asset["markets"] + ", " + '"'+values["name"]+'"'
+                asset["avg_USD_price"] = decimal.Decimal(values[asset_name]["usd_to_pln"]).quantize(Decimal('0.00'))
+        asset_values.append(asset)
+    return asset_values
+
+
+def calculate_portfolio_value():
+    # TODO: Zaimplementować
+    return 0
+
+
 @app.route('/result', methods=['GET', 'POST'])
 def show_result():
     form_data1 = session.get('form_data1', {})
     form_data2 = session.get('form_data2', {})
     portfolio_values = session.get('portfolio_values', {})
     assets = {key: value for key, value in form_data1.items() if key not in ('Case_number', 'Enforcement_authority', 'Owner')}
+    asset_values = calculate_asset_values(assets, portfolio_values)
     return render_template('result.html', title='Szacowanie wartości kryptoaktywów', raport_id=str(uuid.uuid4()),
-                           raport_date=datetime.datetime.now().strftime("%d.%m.%Y"), form_data1=form_data1,
-                           form_data2=form_data2, portfolio_value=0)
+                           raport_date=datetime.datetime.now().strftime("%d.%m.%Y"), case_number=form_data1["Case_number"],
+                           owner=form_data1["Owner"], portfolio_value=calculate_portfolio_value(), assets=assets, asset_values=asset_values, portfolio_values=portfolio_values)
 
 
 @app.route('/update_directory', methods=['GET'])

@@ -14,14 +14,19 @@ class ZondaSpotDataProvider(BaseDataProvider):
     def get_ticker(self, pair: str):
         url = f"{self.BASE_URL}{pair}"
         response = requests.get(url)
-
         if response.status_code == 200:
-            return response.json()
+            json_r = response.json()
+            if json_r["status"] != "Fail":
+                return json_r
+            else:
+                return None
         else:
-            response.raise_for_status()
+            return None
 
     def get_rate_value(self, crypto, currency):
         pair = get_short_name(crypto) + "-" + currency
+        rate = None
         tickers = self.get_ticker(pair)
-        rate = tickers['ticker']['rate']
+        if tickers is not None:
+            rate = tickers['ticker']['rate']
         return rate

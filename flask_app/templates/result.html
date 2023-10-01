@@ -16,33 +16,72 @@
         </div>
         <div class="form-group row">
             <label class="col-sm-1 col-form-label" style="text-align: left;">Numer sprawy</label>
-            <label class="col-sm-5 col-form-label" style="word-break: break-all;">{{form_data1["Case_number"]}}</label>
+            <label class="col-sm-5 col-form-label" style="word-break: break-all;">{{case_number}}</label>
             <label class="col-sm-1 col-form-label" style="text-align: left;">Właściciel</label>
-            <label class="col-sm-5 col-form-label" style="word-break: break-all;">{{form_data1["Owner"]}}</label>
+            <label class="col-sm-5 col-form-label" style="word-break: break-all;">{{owner}}</label>
         </div>
         <hr>
         <div class="form-group row">
             <label class="col-sm-5 col-form-label" style="text-align: left;">Szacunkowa wartość kryptoaktywów:</label>
             <label class="col-sm-7 col-form-label" style="word-break: break-all;">{{portfolio_value}}</label>
         </div>
+        Wartość kryptoaktywów wyliczono poprzez uśrednienie
+        <hr>
+        <table class="table">
+            <thead class="thead-light">
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">kryptoaktywo</th>
+                    <th scope="col">ilość</th>
+                    <th scope="col">giełdy</th>
+                    <th scope="col">średni kurs USD</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for asset in asset_values %}
+                <tr>
+                    <th scope="row">{{ loop.index }}</th>
+                    <td>{{ asset["name"] }}</td>
+                    <td>{{ asset["amount"] }}</td>
+                    <td>{{ asset["markets"] }}</td>
+                    <td>{{ asset["avg_USD_price"] }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <hr>
+
+        <table class="table">
+            <thead class="thead-light">
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">giełda/kantor</th>
+                    <th scope="col">kryptoaktywo</th>
+                    <th scope="col">czy notowane?</th>
+                    <th scope="col">kurs [USD]</th>
+                    <th scope="col">kurs [PLN]</th>
+                    <th scope="col">wartość [PLN]</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for values in portfolio_values %}
+                {% for asset in assets %}
+                <tr>
+                    <th scope="row">{{ loop.index }}</th>
+                    <td>{{ values["name"] }}</td>
+                    <td>{{ asset }}</td>
+                    <td>{{ 'Tak' if values[asset] else 'Nie dotyczy' }}</td>
+                    <td>{{ values[asset]['rate_usd'] if values[asset] else 'Nie dotyczy' }}</td>
+                    <td>{{ values[asset]['rate_pln'] if values[asset] else 'Nie dotyczy' }}</td>
+                    <td>{{ values[asset]['value'] if values[asset] else 'Nie dotyczy' }}</td>
+                </tr>
+                {% endfor %}
+            {% endfor %}
+            </tbody>
+        </table>
         <hr>
 <!--        {% if species|length > 0 %}-->
-<!--            <table class="table">-->
-<!--            <thead class="thead-light">-->
-<!--                <tr>-->
-<!--                    <th scope="col">#</th>-->
-<!--                    <th scope="col">Gatunek</th>-->
-<!--                </tr>-->
-<!--            </thead>-->
-<!--            <tbody>-->
-<!--            {% for animal in species %}-->
-<!--                <tr>-->
-<!--                    <th scope="row">{{ loop.index }}</th>-->
-<!--                    <td>{{ animal }}</td>-->
-<!--                </tr>-->
-<!--            {% endfor %}-->
-<!--            </tbody>-->
-<!--            </table>-->
+
 <!--        {% else %}-->
 <!--            <p style="color: red">Nie znaleziono danych!</p>-->
 <!--        {% endif %}-->
