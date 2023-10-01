@@ -9,7 +9,7 @@ from config import Config
 from collections import defaultdict
 from decimal import Decimal
 
-from rate_data_providers import BinanceSpotDataProvider, KucoinSpotDataProvider
+from rate_data_providers import BinanceSpotDataProvider, KucoinSpotDataProvider, ZondaSpotDataProvider
 
 
 app = Flask(__name__, static_url_path=Config.flask_static_url_path)
@@ -32,6 +32,11 @@ def get_markets(market_dict='./data/markets.json'):
     with open(market_dict, 'r') as f:
         markets = json.load(f)
     return markets
+
+def get_authorities(authorities_file='./data/authorities.txt'):
+    with open(authorities_file, 'r') as f:
+        authorities = [line.strip() for line in f]
+    return authorities
 
 
 @app.route('/calculator1', methods=['GET', 'POST'])
@@ -66,7 +71,8 @@ def calculator1():
         result_dict.update(grouped_dict)
         session['form_data1'] = result_dict
         return redirect(url_for('calculator2'))
-    return render_template('calculator1.html', title='Kalkulator kryptowalut', crypto_fields=get_crypto_fields())
+    return render_template('calculator1.html', title='Kalkulator kryptowalut', \
+       crypto_fields=get_crypto_fields(), authorities=get_authorities())
 
 
 def calculate_manual_market_values(assets, value):
@@ -98,7 +104,7 @@ def calculate_auto_market_values(assets, value):
     elif value.startswith("Kucoin"):
         data_provider = KucoinSpotDataProvider()
     elif value.startswith("Zonda"):
-        # TODO: uzupełnić o data provider-a Zondy
+        data_provider = ZondaSpotDataProvider()
         pass
     else:
         # TODO: zwrócić komunikat błędu, bo nie wspieramy danego data provider-a
@@ -148,6 +154,7 @@ def is_portfolio_values_correct(form_data1, portfolio_values):
 @app.route('/calculator2', methods=['GET', 'POST'])
 def calculator2():
     form_data = session.get('form_data1', {})
+    print(form_data)
     if request.method == 'POST':
         if len(request.form) < 3:
             flash(f"Nie zdefiniowano minimum 3 dostawców danych", 'alert alert-danger')
