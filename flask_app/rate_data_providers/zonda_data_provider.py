@@ -3,6 +3,7 @@ import requests
 from .base_data_provider import BaseDataProvider
 from .utils import get_short_name
 
+
 class ZondaSpotDataProvider(BaseDataProvider):
     source_name = 'Zonda'
     BASE_URL = 'https://api.zondacrypto.exchange/rest/trading/ticker/'

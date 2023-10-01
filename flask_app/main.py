@@ -77,8 +77,7 @@ def calculator1():
 
 def calculate_manual_market_values(assets, value):
     market = json.loads(value)
-    # TODO: pobierać kurs USD z api NBP
-    usd_to_pln = Decimal(4.3)
+    usd_to_pln = Decimal(get_rate('usd'))
     manual_market_values = {"name": market["name"] + " (" + market["address_url"] + ")", "type": "manual"}
     for asset in assets:
         if asset not in list(market.keys()):
@@ -100,9 +99,7 @@ def calculate_manual_market_values(assets, value):
 
 
 def calculate_auto_market_values(assets, value):
-    # TODO: pobierać kurs USD z api NBP
-    # get_rate('usd')
-    usd_to_pln = Decimal(4.3)
+    usd_to_pln = Decimal(get_rate('usd'))
     auto_market_values = {"name": value, "type": "auto"}
     data_provider = None
     if value.startswith("Binance"):
@@ -145,7 +142,6 @@ def calculate_portfolio_values(form_data1, form_data2):
             portfolio_values.append(calculate_manual_market_values(assets, value))
         else:
             portfolio_values.append(calculate_auto_market_values(assets, value))
-    print(portfolio_values)
     return portfolio_values
 
 
