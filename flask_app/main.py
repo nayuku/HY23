@@ -1,5 +1,7 @@
 import json
 import re
+import sys
+import os
 
 from flask import Flask, render_template, request, flash, url_for, session
 from werkzeug.utils import redirect
@@ -7,7 +9,10 @@ from config import Config
 from collections import defaultdict
 from decimal import Decimal
 
-from rate_data_providers import BinanceSpotDataProvider, KucoinSpotDataProvider
+parent_dir = os.path.dirname(os.path.abspath(__file__))
+sys.path.append(parent_dir)
+
+from rate_data_providers import BinanceSpotDataProvider, KucoinSpotDataProvider, ZondaCryptoExchange
 
 
 app = Flask(__name__, static_url_path=Config.flask_static_url_path)
@@ -83,14 +88,18 @@ def calculator2():
 
 @app.route('/result', methods=['GET', 'POST'])
 def show_result():
-    form_data1 = session.get('form_data1', {})
-    form_data2 = session.get('form_data2', {})
-    print(form_data1)
-    print(form_data2)
+    # form_data1 = session.get('form_data1', {})
+    # form_data2 = session.get('form_data2', {})
+    # print(form_data1)
+    # print(form_data2)
     binance_data_provider = BinanceSpotDataProvider()
-    kucoin_data_provider = KucoinSpotDataProvider()
-    print(binance_data_provider.get_rate_value("Bitcoin", "USD"))
+    # kucoin_data_provider = KucoinSpotDataProvider()
+    # print(binance_data_provider.get_rate_value("Bitcoin", "USD"))
     print(kucoin_data_provider.get_rate_value("Bitcoin", "USD"))
+    zonda_crypto = ZondaCryptoExchange()
+    pair = 'BTC-PLN'
+    ticker = zonda_crypto.get_ticker(pair)
+    print(ticker)
     return render_template('about.html', title='Wyniki')
 
 
