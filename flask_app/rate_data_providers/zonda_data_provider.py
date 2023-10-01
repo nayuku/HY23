@@ -1,8 +1,15 @@
 import requests
+
+from .base_data_provider import BaseDataProvider
 from .utils import get_short_name
 
-class ZondaSpotDataProvider:
+class ZondaSpotDataProvider(BaseDataProvider):
+    source_name = 'Zonda'
     BASE_URL = 'https://api.zondacrypto.exchange/rest/trading/ticker/'
+
+    def __init__(self):
+        client = None
+        super(ZondaSpotDataProvider, self).__init__(client=client)
 
     def get_ticker(self, pair: str):
         url = f"{self.BASE_URL}{pair}"

@@ -34,6 +34,11 @@ def get_markets(market_dict='./data/markets.json'):
         markets = json.load(f)
     return markets
 
+def get_authorities(authorities_file='./data/authorities.txt'):
+    with open(authorities_file, 'r') as f:
+        authorities = [line.strip() for line in f]
+    return authorities
+
 
 @app.route('/calculator1', methods=['GET', 'POST'])
 def calculator1():
@@ -67,12 +72,14 @@ def calculator1():
         result_dict.update(grouped_dict)
         session['form_data1'] = result_dict
         return redirect(url_for('calculator2'))
-    return render_template('calculator1.html', title='Kalkulator kryptowalut', crypto_fields=get_crypto_fields())
+    return render_template('calculator1.html', title='Kalkulator kryptowalut', \
+       crypto_fields=get_crypto_fields(), authorities=get_authorities())
 
 
 @app.route('/calculator2', methods=['GET', 'POST'])
 def calculator2():
     form_data = session.get('form_data1', {})
+    print(form_data)
     if request.method == 'POST':
         if len(request.form) == 0:
             flash(f"Nie wybranego żadnego dostawcy danych", 'alert alert-danger')
