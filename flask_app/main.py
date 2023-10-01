@@ -10,7 +10,7 @@ from collections import defaultdict
 from decimal import Decimal
 
 
-from rate_data_providers import BinanceSpotDataProvider, KucoinSpotDataProvider, ZondaCryptoExchange
+from rate_data_providers import BinanceSpotDataProvider, KucoinSpotDataProvider, ZondaSpotDataProvider
 
 
 app = Flask(__name__, static_url_path=Config.flask_static_url_path)
@@ -91,13 +91,12 @@ def show_result():
     # print(form_data1)
     # print(form_data2)
     binance_data_provider = BinanceSpotDataProvider()
-    # kucoin_data_provider = KucoinSpotDataProvider()
-    # print(binance_data_provider.get_rate_value("Bitcoin", "USD"))
+    kucoin_data_provider = KucoinSpotDataProvider()
+    zonda_data_provider = ZondaSpotDataProvider()
+    print(binance_data_provider.get_rate_value("Bitcoin", "USD"))
     print(kucoin_data_provider.get_rate_value("Bitcoin", "USD"))
-    zonda_crypto = ZondaCryptoExchange()
-    pair = 'BTC-PLN'
-    ticker = zonda_crypto.get_ticker(pair)
-    print(ticker)
+    print(zonda_data_provider.get_rate_value("Bitcoin", "USD"))
+
     return render_template('about.html', title='Wyniki')
 
 
