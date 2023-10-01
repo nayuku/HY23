@@ -9,8 +9,6 @@ from config import Config
 from collections import defaultdict
 from decimal import Decimal
 
-parent_dir = os.path.dirname(os.path.abspath(__file__))
-sys.path.append(parent_dir)
 
 from rate_data_providers import BinanceSpotDataProvider, KucoinSpotDataProvider, ZondaCryptoExchange
 
