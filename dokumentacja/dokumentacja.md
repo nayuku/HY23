@@ -11,11 +11,18 @@ Formularz
 
 Umożliwia oszacowanie wartości dla podanego portfelu dla wprowadzonych danych
 
+## Pomysł
+Wartość wszystkich kryptoaktywów wyliczona została poprzez zsumowanie uśrednionej wartości kryptoaktywów ze zdefiniowanych źródeł danych.
+
+Podczas uśredniania wartości kryptoaktywa ze wszystkich obsługujących go giełd skorzystano ze średniej arytmetycznej.
+
+Przy pobieraniu informacji o cenie kryptoaktywa z API dostawców zewnętrznych brano pod uwagę ostatnio zanotowaną świeczkę. Preferowano dane wyceniające kryptowalutę do PLN.
+
 ## Założenia
 Długa nazwa jest unikalna
 
 ## Wymagania funkcjonalne
--. Automatyczne pobieranie danych wartości kryptowaluty w PLN ($)
+- Automatyczne pobieranie danych wartości kryptowaluty w PLN ($)
 
 - Manualne wprowadzanie danych
 - Generowanie raportu
