@@ -7,6 +7,8 @@ from config import Config
 from collections import defaultdict
 from decimal import Decimal
 
+from rate_data_providers import BinanceSpotDataProvider, KucoinSpotDataProvider
+
 
 app = Flask(__name__, static_url_path=Config.flask_static_url_path)
 app.config.from_object('config.BaseConfig')
@@ -85,6 +87,10 @@ def show_result():
     form_data2 = session.get('form_data2', {})
     print(form_data1)
     print(form_data2)
+    binance_data_provider = BinanceSpotDataProvider()
+    kucoin_data_provider = KucoinSpotDataProvider()
+    print(binance_data_provider.get_rate_value("Bitcoin", "USD"))
+    print(kucoin_data_provider.get_rate_value("Bitcoin", "USD"))
     return render_template('about.html', title='Wyniki')
 
 
