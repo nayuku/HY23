@@ -66,10 +66,12 @@
                 </tr>
             </thead>
             <tbody>
+            {% set cnt = [0] %}
             {% for values in portfolio_values %}
                 {% for asset in assets %}
+                {% if cnt.append(cnt.pop() + 1) %}{% endif %}
                 <tr>
-                    <th scope="row">{{ loop.index }}</th>
+                    <th scope="row">{{ cnt[0] }}</th>
                     <td>{{ values["name"] }}</td>
                     <td>{{ asset }}</td>
                     <td>{{ 'Tak' if values[asset] else 'Nie' }}</td>
