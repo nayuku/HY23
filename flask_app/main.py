@@ -33,8 +33,9 @@ def get_markets(market_dict='./data/markets.json'):
         markets = json.load(f)
     return markets
 
+
 def get_authorities(authorities_file='./data/authorities.txt'):
-    with open(authorities_file, 'r') as f:
+    with open(authorities_file, 'r', encoding="utf-8") as f:
         authorities = [line.strip() for line in f]
     return authorities
 
@@ -47,17 +48,17 @@ def calculator1():
         if any(len(form_data[key]) != 100 for key in keys_to_check):
             flash(f'Numer sprawy i dane właściciela muszą mieć dokładnie 100 znaków!', 'alert alert-danger')
             return render_template('calculator1.html', title='Kalkulator kryptowalut',
-                                   crypto_fields=get_crypto_fields(), form_data=form_data)
+                                   crypto_fields=get_crypto_fields(), form_data=form_data, authorities=get_authorities())
         allowed_characters = re.compile(r'^[a-zA-Z0-9.-/]+$')
         if not all(allowed_characters.match(form_data[key]) for key in keys_to_check):
             flash(f'Numer sprawy i dane właściciela mogą zawierać tylko znaki alfanumeryczne i symbole ,.”,-„/!"', 'alert alert-danger')
             return render_template('calculator1.html', title='Kalkulator kryptowalut',
-                                   crypto_fields=get_crypto_fields(), form_data=form_data)
+                                   crypto_fields=get_crypto_fields(), form_data=form_data, authorities=get_authorities())
 
         if len(request.form) == 3:
             flash(f"Nie dodano żadnego kryptoaktywa", 'alert alert-danger')
             return render_template('calculator1.html', title='Kalkulator kryptowalut',
-                                   crypto_fields=get_crypto_fields(), form_data=form_data)
+                                   crypto_fields=get_crypto_fields(), form_data=form_data, authorities=get_authorities())
 
         # delete_prefix and sum coin values
         result_dict = {}
@@ -71,8 +72,7 @@ def calculator1():
         result_dict.update(grouped_dict)
         session['form_data1'] = result_dict
         return redirect(url_for('calculator2'))
-    return render_template('calculator1.html', title='Kalkulator kryptowalut', \
-       crypto_fields=get_crypto_fields(), authorities=get_authorities())
+    return render_template('calculator1.html', title='Kalkulator kryptowalut', crypto_fields=get_crypto_fields(), authorities=get_authorities())
 
 
 def calculate_manual_market_values(assets, value):
@@ -154,7 +154,6 @@ def is_portfolio_values_correct(form_data1, portfolio_values):
 @app.route('/calculator2', methods=['GET', 'POST'])
 def calculator2():
     form_data = session.get('form_data1', {})
-    print(form_data)
     if request.method == 'POST':
         if len(request.form) < 3:
             flash(f"Nie zdefiniowano minimum 3 dostawców danych", 'alert alert-danger')
